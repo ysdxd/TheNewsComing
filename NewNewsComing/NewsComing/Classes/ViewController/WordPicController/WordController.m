@@ -33,7 +33,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //初始化 导航栏内部的按钮
     [self sc];
+    
     [self.tableView.mj_header beginRefreshing];
 }
 
@@ -59,10 +62,16 @@
     return UITableViewAutomaticDimension;
 }
 
+//点击事件
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     WordDetailController *vc = [[WordDetailController alloc] initWithContent:[self.wordVM contentForRow:indexPath.row]];
+    
     vc.hidesBottomBarWhenPushed = YES;
+    
+    //跳转到详情
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -85,6 +94,7 @@
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(0);
         }];
+        
         _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
             [self.wordVM refreshDataCompletionHandler:^(NSError *error) {
                 if (!error) {
@@ -106,19 +116,26 @@
 }
 
 - (UISegmentedControl *)sc {
+    
     if(_sc == nil) {
         NSArray *arr = [NSArray arrayWithObjects:@"段子",@"图片", nil];
         _sc = [[UISegmentedControl alloc] initWithItems:arr];
         _sc.frame = CGRectMake(0, 0, 150, 30);
         _sc.selectedSegmentIndex = 0;
         _sc.tintColor = [UIColor whiteColor];
+        
+        //点击回调
         [_sc bk_addEventHandler:^(id sender) {
             NSMutableArray *naviVCs = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
             [naviVCs removeLastObject];
+            
             PicController *vc = [PicController new];
             [naviVCs addObject:vc];
             self.navigationController.viewControllers = naviVCs;
-        } forControlEvents:UIControlEventValueChanged];
+        }
+               forControlEvents:UIControlEventValueChanged];
+        
+        //设置到导航栏中
         [self.navigationItem setTitleView:_sc];
     }
     return _sc;

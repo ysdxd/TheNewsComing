@@ -66,7 +66,7 @@
             make.left.mas_equalTo(10);
             make.right.mas_equalTo(-10);
             make.top.mas_equalTo(kWindowH/4);
-            make.bottom.mas_equalTo(-kWindowH/2);
+            make.bottom.mas_equalTo(-kWindowH/4);
         }];
 	}
 	return _contentTV;
