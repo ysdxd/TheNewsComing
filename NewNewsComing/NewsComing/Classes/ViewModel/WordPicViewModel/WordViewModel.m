@@ -31,6 +31,8 @@
 }
 
 - (void)getDataFromNetCompletionHandler:(completionHandler)completionHandler {
+    
+    //请求数据
     self.dataTask = [WordNetManager getWordWithPage:self.page completionHandler:^(id model, NSError *error) {
         if (!error) {
             if (self.page == 1) {

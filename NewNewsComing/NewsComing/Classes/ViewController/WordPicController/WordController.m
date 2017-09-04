@@ -45,6 +45,7 @@
     return self.wordVM.rowNum;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     WordCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     cell.contentLB.text = [self.wordVM contentForRow:indexPath.row];
     NSString *title = [self.wordVM zanNumForRow:indexPath.row];
@@ -54,6 +55,7 @@
         [self showSuccessWithMsg:@"点赞成功"];
     } forControlEvents:UIControlEventTouchUpInside];
     cell.dateLB.text = [self.wordVM dateForRow:indexPath.row];
+    
     return cell;
 }
 
@@ -83,18 +85,23 @@
     return _wordVM;
 }
 
+#pragma mark - 懒加载
 - (UITableView *)tableView {
     if(_tableView == nil) {
+        
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.tableFooterView = [UIView new];
         [_tableView registerClass:[WordCell class] forCellReuseIdentifier:@"Cell"];
+        
+        //添加到页面，高宽为当前页面大小
         [self.view addSubview:_tableView];
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(0);
         }];
         
+        //设置下拉刷新组件
         _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
             [self.wordVM refreshDataCompletionHandler:^(NSError *error) {
                 if (!error) {
@@ -103,6 +110,8 @@
                 [_tableView.mj_header endRefreshing];
             }];
         }];
+        
+        //设置上拉加载更多
         _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
             [self.wordVM getMoreDataCompletionHandler:^(NSError *error) {
                 if (!error) {
