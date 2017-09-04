@@ -81,6 +81,7 @@
     UINavigationController *navi2 = [VideoController defaultVideoNavi];
     UINavigationController *navi3 = [MyController defaultMyNavi];
     
+    //自定义tabbar
     CYLTabBarController *tbc = [CYLTabBarController new];
     
     //设置tabbar item个数
